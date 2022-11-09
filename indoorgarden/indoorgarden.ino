@@ -26,4 +26,7 @@ float GetTemperature(int input)
 void loop() { 
     float temperature = GetTemperature(inputTemperature);
     processSensorValues(temperature, led1);
+    //TODO: Luftfeuchtigkeit verarbeiten
+    //TODO: Bodenfeuchtigkeit verarbeiten
+    //TODO: Licht verarbeiten
 }
