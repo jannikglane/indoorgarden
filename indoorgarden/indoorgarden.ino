@@ -7,9 +7,9 @@ void setup() {
   pinMode(inputTemperature, INPUT);
   pinMode(led1, OUTPUT);
 }
-void processSensorValues(int inputvalue, int output)
+void processSensorValues(int inputValue, int minValue,int output)
 {
-  if (inputvalue < minTemp) 
+  if (inputValue < minValue) 
   {
     digitalWrite(output, HIGH);
   } else
@@ -25,7 +25,7 @@ float GetTemperature(int input)
 }
 void loop() { 
     float temperature = GetTemperature(inputTemperature);
-    processSensorValues(temperature, led1);
+    processSensorValues(temperature, minTemp, led1);
     //TODO: Luftfeuchtigkeit verarbeiten
     //TODO: Bodenfeuchtigkeit verarbeiten
     //TODO: Licht verarbeiten
