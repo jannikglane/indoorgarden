@@ -1,12 +1,11 @@
 int inputTemperature = A0;
 int led1 = 2;
 float minTemp = 20;
-float inputvalue;
+const float BETA = 3950;
 
 void setup() {
   pinMode(inputTemperature, INPUT);
   pinMode(led1, OUTPUT);
-  Serial.begin(9600);
 }
 void processSensorValues(int inputvalue, int output)
 {
@@ -17,14 +16,14 @@ void processSensorValues(int inputvalue, int output)
   {
     digitalWrite(output, LOW);
   }
-  
 }
-float GetTemperature()
+float GetTemperature(int input)
 {
+  float sensorValue = analogRead(input);
+  float temperature = 1 / (log(1 / (1023. / sensorValue - 1)) / BETA + 1.0 / 298.15) - 273.15;
+  return temperature;
 }
-void loop() {
-    inputvalue := GetTemperature();
-    processSensorValues(inputvalue, led1);
-
-
+void loop() { 
+    float temperature = GetTemperature(inputTemperature);
+    processSensorValues(temperature, led1);
 }
