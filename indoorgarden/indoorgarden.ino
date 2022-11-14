@@ -1,3 +1,9 @@
+#include <LiquidCrystal.h>
+
+// configuring lcd display
+const int rs = 2, e = 4, d4 = 8, d5 = 9, d6 = 10, d7 = 11;
+LiquidCrystal lcd(rs, e, d4, d5, d6, d7);
+
 int inputTemperature = A0;
 int led1 = 2;
 float minTemp = 20;
@@ -6,6 +12,11 @@ const float BETA = 3950;
 void setup() {
   pinMode(inputTemperature, INPUT);
   pinMode(led1, OUTPUT);
+
+  // initial lcd setup
+    lcd.begin(16, 2);
+    lcd.setCursor(0,0);
+    lcd.print("IndoorGarden");
 }
 void processSensorValues(int inputValue, int minValue,int output)
 {
