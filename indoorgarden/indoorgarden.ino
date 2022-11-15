@@ -1,4 +1,5 @@
 #include <LiquidCrystal.h>
+#include "menu.h"
 
 // configuring lcd display
 const int rs = 2, e = 4, d4 = 8, d5 = 9, d6 = 10, d7 = 11;
@@ -32,6 +33,7 @@ void setup() {
   lcd.setCursor(0,0);
   lcd.print("IndoorGarden");
 }
+
 void processSensorValues(int inputValue, int minValue,int output)
 {
   if (inputValue < minValue) 
