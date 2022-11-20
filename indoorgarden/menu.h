@@ -1,39 +1,56 @@
 #ifndef MENU_H
 #define MENU_H
+#include "settings.h"
 
-enum menuType {
-    base,
-    lightControl,
-    waterControl,
-    tempControl
+enum MenuType {
+    base = 0,
+    lightControl = 1,
+    waterControl = 2,
+    tempControl = 2
 };
 
-class Menu
+typedef struct MenuBase
 {
-private:
-    int menuPos = 0;
-    MenuItem entries[];
-public:
-    Menu();
-    ~Menu();
+    SubMenu entries[3];
+    int menuPos;
+    LightSettings lightSettings;
+    WaterSettings waterSettings;
+    TempSettings tempSettings;
 };
 
-class MenuItem
+typedef struct SubMenu
 {
-private:
     String title;
-public:
-    MenuItem();
-    ~MenuItem();
+    MenuItem items[5];
+    MenuType type;
 };
 
-MenuItem::MenuItem()
+typedef struct MenuItem
 {
-}
+    String title;
+    int *valueToChange;
+};
 
-MenuItem::~MenuItem()
-{
-}
+
+// class Menu
+// {
+// private:
+//     int _menuPos = 0;
+//     MenuItem *_entries[];
+// public:
+//     Menu(MenuItem items[]);
+//     ~Menu();
+// };
+
+
+// class MenuItem
+// {
+// private:
+//     String _title;
+// public:
+//     MenuItem(String title);
+//     ~MenuItem();
+// };
 
 
 #endif
