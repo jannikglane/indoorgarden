@@ -11,8 +11,9 @@ enum MenuType {
 
 typedef struct MenuBase
 {
-    SubMenu entries[3];
     int menuPos;
+    MenuType currentMenu;
+    SubMenu entries[3];
     LightSettings lightSettings;
     WaterSettings waterSettings;
     TempSettings tempSettings;
@@ -31,26 +32,10 @@ typedef struct MenuItem
     int *valueToChange;
 };
 
-
-// class Menu
-// {
-// private:
-//     int _menuPos = 0;
-//     MenuItem *_entries[];
-// public:
-//     Menu(MenuItem items[]);
-//     ~Menu();
-// };
-
-
-// class MenuItem
-// {
-// private:
-//     String _title;
-// public:
-//     MenuItem(String title);
-//     ~MenuItem();
-// };
-
+MenuBase initializeMenu();
+SubMenu buildLightMenu(LightSettings *settings);
+SubMenu buildWaterMenu(WaterSettings *settings);
+SubMenu buildTempMenu(TempSettings *settings);
+void navigateMenu(struct MenuBase *menu, int newPos);
 
 #endif

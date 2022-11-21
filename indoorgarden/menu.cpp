@@ -2,60 +2,79 @@
 
 MenuBase initializeMenu()
 {
+    // Initialize settings
     LightSettings lightSettings = {};
     WaterSettings waterSettings = {};
     TempSettings tempSettings = {};
 
+    // Initializing menu with entries
     SubMenu lightControl = buildLightMenu(&lightSettings);
+    SubMenu waterControl = buildWaterMenu(&waterSettings);
+    SubMenu tempControl = buildTempMenu(&tempSettings);
 
-    SubMenu waterControl = {};
-    lightControl.title = "Wassersteuerung";
-    lightControl.type = MenuType::waterControl;
-
-    SubMenu tempControl = {};
-    lightControl.title = "Temp.Steuerung";
-    lightControl.type = MenuType::tempControl;
-
-    MenuBase menu = {};
-    menu.menuPos = 0;
-    menu.lightSettings = lightSettings;
-    menu.waterSettings = waterSettings;
-    menu.tempSettings = tempSettings;
-    SubMenu subMenus[] = {lightControl, waterControl, tempControl};
-    for (int i = 0; i < sizeof(menu.entries); i++)
-    {
-        menu.entries[i] = subMenus[i];
-    }
+    MenuBase menu = {
+        0,
+        MenuType::base,
+        {lightControl, waterControl, tempControl},
+        lightSettings,
+        waterSettings,
+        tempSettings
+    };
     
     return menu;
 }
 
 SubMenu buildLightMenu(LightSettings *settings)
 {
-    SubMenu lightControl = {};
-    lightControl.title = "Lichtsteuerung";
-    lightControl.type = MenuType::lightControl;
+    MenuItem lightAuto = {"Auto. Lichtst.", &settings->automatic};
 
-    MenuItem lightAuto = {};
-    lightAuto.title = "Auto. Lichtst.";
-    lightAuto.valueToChange = &settings->automatic;
+    MenuItem lightTreshold = {"Auto. %-Wert", &settings->lightThreshold};
+
+    MenuItem lightTimeFrom = {"Zeit Ab", &settings->timeFrom};
+
+    MenuItem lightTimeTo = {"Zeit Bis", &settings->timeTo};
+
+    SubMenu lightControl = 
+    {
+        "Lichtsteuerung",
+        {lightAuto, lightTreshold, lightTimeFrom, lightTimeTo},
+        MenuType::lightControl
+    };
+
+    return lightControl;
 }
 
-// Menu::Menu(MenuItem items[])
-// {
-//     this->_entries = items;
-// }
+SubMenu buildWaterMenu(WaterSettings *settings)
+{
+    MenuItem humidityTreshold = {"\%-Luftfeucht.", &settings->humidityThreshold};
 
-// Menu::~Menu()
-// {
-// }
+    SubMenu waterControl = {
+        "Wassersteuerung",
+        {humidityTreshold},
+        MenuType::waterControl
+    };
 
+    return waterControl;
+}
 
-// MenuItem::MenuItem(String title)
-// {
-//     this->_title = title;
-// }
+SubMenu buildTempMenu(TempSettings *settings)
+{
+    MenuItem tempTreshold = {"Temperatur", &settings->tempTreshold};
 
-// MenuItem::~MenuItem()
-// {
-// }
+    SubMenu tempControl = {
+        "Temp.steuerung",
+        {tempTreshold},
+        MenuType::tempControl
+    };
+
+    return tempControl;
+}
+
+void navigateMenu(struct MenuBase *menu, int newPos)
+{
+    if (newPos > sizeof(menu->entries) || newPos < 0)
+    {
+        return;
+    }
+    menu->menuPos = newPos;
+}

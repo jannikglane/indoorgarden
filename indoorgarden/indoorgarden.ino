@@ -9,15 +9,7 @@ const int button_up = 5, button_down = 7, button_ok = 6; // button pins
 enum Button {none = 0, up = 1, down = 2, ok = 3};
 
 // MENU -- 16 chars per line
-const int menu_entries = 2;
-int menu_position = 0;
-
-const String lightControl = "Lichtsteuerung";
-const String waterControl = "Wassersteuerung";
-
-const String menu[menu_entries] = {
-  lightControl, waterControl
-};
+MenuBase menu;
 
 int inputTemperature = A0;
 int led1 = 2;
@@ -32,6 +24,8 @@ void setup() {
   lcd.begin(16, 2);
   lcd.setCursor(0,0);
   lcd.print("IndoorGarden");
+
+  menu = initializeMenu();
 }
 
 void processSensorValues(int inputValue, int minValue,int output)
@@ -66,25 +60,11 @@ void processInput(enum Button input)
   switch(input)
   {
     case up:
-      if (menu_position - 1 < 0)
-      {
-        menu_position = menu_entries;
-      }
-      else
-      {
-        menu_position -= 1;
-      }
+      navigateMenu(&menu, menu.menuPos+1);
       displayMenu();
       break;
     case down:
-      if (menu_position + 1 > menu_entries)
-      {
-        menu_position = 0;
-      }
-      else
-      {
-        menu_position += 1;
-      }
+      navigateMenu(&menu, menu.menuPos-1);
       displayMenu();
       break;
     case ok:
@@ -99,7 +79,7 @@ void displayMenu()
 {
   lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print(menu[menu_position]);
+  lcd.print(menu.entries[menu.menuPos].title);
 }
 
 enum Button getInput()
