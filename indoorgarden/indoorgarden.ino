@@ -38,6 +38,7 @@ void processSensorValues(int inputValue, int minValue,int output)
     digitalWrite(output, LOW);
   }
 }
+
 float GetTemperature(int input)
 {
   float sensorValue = analogRead(input);
@@ -68,7 +69,7 @@ void processInput(enum Button input)
       displayMenu();
       break;
     case ok:
-      // TODO - navigateToMenuPosition();
+      // TODO: enter submenu
       break;
     case none:
       break;

@@ -70,7 +70,7 @@ SubMenu buildTempMenu(TempSettings *settings)
     return tempControl;
 }
 
-void navigateMenu(struct MenuBase *menu, int newPos)
+void navigateMenu(MenuBase *menu, int newPos)
 {
     if (newPos > sizeof(menu->entries) || newPos < 0)
     {

@@ -1,7 +1,7 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-typedef struct LightSettings
+struct LightSettings
 {
     int automatic;
     int lightThreshold;
@@ -9,12 +9,12 @@ typedef struct LightSettings
     int timeTo;
 };
 
-typedef struct WaterSettings
+struct WaterSettings
 {
     int humidityThreshold;
 };
 
-typedef struct TempSettings
+struct TempSettings
 {
     int tempTreshold;
 };
