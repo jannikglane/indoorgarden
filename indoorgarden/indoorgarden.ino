@@ -1,26 +1,28 @@
 #include <LiquidCrystal.h>
+#include <DHT.h>
+#define PIN 3
+#define TYPE DHT22
+DHT dht(PIN, TYPE);
 
 // configuring lcd display
 const int rs = 2, e = 4, d4 = 8, d5 = 9, d6 = 10, d7 = 11;
 LiquidCrystal lcd(rs, e, d4, d5, d6, d7);
 
-int inputTemperature = A0;
-int led1 = 2;
-float minTemp = 20;
-const float BETA = 3950;
+int led1 = 12;
+float maxTemperature = 20;
+float maxHumidity = 30;
 
 void setup() {
-  pinMode(inputTemperature, INPUT);
-  pinMode(led1, OUTPUT);
-
+   pinMode(led1, OUTPUT);
+   dht.begin();
   // initial lcd setup
     lcd.begin(16, 2);
     lcd.setCursor(0,0);
     lcd.print("IndoorGarden");
 }
-void processSensorValues(int inputValue, int minValue,int output)
+void processTemperatureAndHumidity(float temperature, float humidity, int output, float maxTemperature, float maxHumidity)
 {
-  if (inputValue < minValue) 
+  if ((temperature > maxTemperature) || (humidity > maxHumidity))
   {
     digitalWrite(output, HIGH);
   } else
@@ -28,16 +30,11 @@ void processSensorValues(int inputValue, int minValue,int output)
     digitalWrite(output, LOW);
   }
 }
-float GetTemperature(int input)
-{
-  float sensorValue = analogRead(input);
-  float temperature = 1 / (log(1 / (1023. / sensorValue - 1)) / BETA + 1.0 / 298.15) - 273.15;
-  return temperature;
-}
 void loop() { 
-    float temperature = GetTemperature(inputTemperature);
-    processSensorValues(temperature, minTemp, led1);
-    //TODO: Luftfeuchtigkeit verarbeiten
+    float temperature = dht.readTemperature();
+    float humidity = dht.readHumidity();
+    processTemperatureAndHumidity(temperature, humidity, led1, maxTemperature, maxHumidity);
+
     //TODO: Bodenfeuchtigkeit verarbeiten
     //TODO: Licht verarbeiten
 }
