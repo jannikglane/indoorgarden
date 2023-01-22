@@ -1,43 +1,82 @@
-#include <LiquidCrystal.h>
+//include library
+#include <DHT.h>
+#include <DHT_U.h>
 
-// configuring lcd display
-const int rs = 2, e = 4, d4 = 8, d5 = 9, d6 = 10, d7 = 11;
-LiquidCrystal lcd(rs, e, d4, d5, d6, d7);
+//configuring dht sensor
+#define PIN 2
+#define TYPE DHT11
+DHT dht(PIN, TYPE);
 
-int inputTemperature = A0;
-int led1 = 2;
-float minTemp = 20;
-const float BETA = 3950;
+//define min and max values
+float maxTemperature = 18;
+float maxHumidity = 50;
+float minSoilMoisturepercent = 40;
 
-void setup() {
-  pinMode(inputTemperature, INPUT);
-  pinMode(led1, OUTPUT);
+//define pins
+const int ventilator = 3;
+const int ledmatrix = 4;
+const int input = A0;
 
-  // initial lcd setup
-    lcd.begin(16, 2);
-    lcd.setCursor(0,0);
-    lcd.print("IndoorGarden");
-}
-void processSensorValues(int inputValue, int minValue,int output)
+//define values for soil moisture
+const float AirValue = 620;   
+const float WaterValue = 310;
+float soilMoistureValue = 0;
+float soilmoisturepercent = 0;
+
+int light = 0;
+
+void setup()
 {
-  if (inputValue < minValue) 
+  //start dht library
+  dht.begin();
+
+  //set pin mode
+  pinMode(ventilator, OUTPUT);
+  pinMode(ledmatrix, OUTPUT);
+  pinMode(input, INPUT);
+  
+  Serial.begin(9600);
+}
+void processTemperatureAndHumidity()
+{
+  float temperature = dht.readTemperature();
+  float humidity = dht.readHumidity();
+  Serial.print("temperature");
+  Serial.println(temperature);
+  Serial.print("humidity");
+  Serial.println(humidity);
+
+  if ((temperature > maxTemperature) || (humidity > maxHumidity))
   {
-    digitalWrite(output, HIGH);
-  } else
+    digitalWrite(ventilator, LOW);
+  }
+  else
   {
-    digitalWrite(output, LOW);
+    digitalWrite(ventilator, HIGH);
   }
 }
-float GetTemperature(int input)
+
+ 
+
+void processsoilMoisture()
 {
-  float sensorValue = analogRead(input);
-  float temperature = 1 / (log(1 / (1023. / sensorValue - 1)) / BETA + 1.0 / 298.15) - 273.15;
-  return temperature;
+  soilMoistureValue = analogRead(input); // put Sensor insert into soil
+  soilmoisturepercent = map(soilMoistureValue, AirValue, WaterValue, 0, 100);
+
+  if (soilmoisturepercent < minSoilMoisturepercent)
+  {
+    digitalWrite(ledmatrix, HIGH);
+  }
+  else
+  {
+    digitalWrite(ledmatrix, LOW);
+  }
 }
-void loop() { 
-    float temperature = GetTemperature(inputTemperature);
-    processSensorValues(temperature, minTemp, led1);
-    //TODO: Luftfeuchtigkeit verarbeiten
-    //TODO: Bodenfeuchtigkeit verarbeiten
-    //TODO: Licht verarbeiten
-}
+
+void loop()
+{
+  processTemperatureAndHumidity();
+  processsoilMoisture();
+
+
+  }
