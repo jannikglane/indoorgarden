@@ -44,17 +44,19 @@ void setup()
 }
 
 void processTemperatureAndHumidity()
-
 {
+  //read temperature and humidity
   float temperature = dht.readTemperature();
   float humidity = dht.readHumidity();
 
+  // start ventilator when exceeding limit values
   if ((temperature > maxTemperature) || (humidity > maxHumidity))
   {
     digitalWrite(ventilator, LOW);
   }
   else
   {
+    //stop ventilator
     digitalWrite(ventilator, HIGH);
   }
 }
