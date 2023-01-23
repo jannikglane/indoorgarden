@@ -1,11 +1,6 @@
 // include libraries
 #include <DHT.h>
 #include <DHT_U.h>
-#include <Wire.h>
-#include <BH1750.h>
-
-// initialize BH1750 object
-BH1750 GY302;
 
 //initialize DHT object
 #define PIN 2
@@ -33,11 +28,9 @@ void setup()
 {
   // start dht library for temperature sensor
   dht.begin();
-
-  // start gy302 library for light sensor
-  GY302.begin();
-
+  
   // set pin mode
+  pinMode(A5, INPUT);
   pinMode(ventilator, OUTPUT);
   pinMode(ledmatrix, OUTPUT);
   pinMode(input, INPUT);
@@ -78,17 +71,21 @@ void processsoilMoisture()
 
 void processLight()
 {
-  // get reading from gy302 light sensor
-  uint16_t lux = GY302.readLightLevel();
+    int rawValue = analogRead(A5); //Read light level
+    Serial.println("Reading: " + String(rawValue));
 
-  if (lux < minLightLevel)
-  {
-    digitalWrite(ledmatrix, HIGH);
-  }
-  else
-  {
-    digitalWrite(ledmatrix, LOW);
-  }
+    double volts = rawValue * 5.0 / 1024.0;
+    long microvolts = volts * 1000000.0;
+    Serial.println("Voltage: " + String(volts) + " V (" + String(microvolts) + " µV)");
+
+    long microamps = microvolts / 10000;
+    Serial.println("Current: " + String(microamps) + " µA");
+
+    long lux = microamps * 2;
+    Serial.println("Illuminance: " + String(lux) + " lx\n");
+
+    delay(2000);
+}
 }
 
 void loop()
