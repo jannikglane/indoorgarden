@@ -1,8 +1,19 @@
+/*
+Title: Indoor Garden
+Authors: Fu Yunfei, Jannik Glane, Matteo Kuschel
+Date: 25.01.2023
+*/
+
 // include libraries
 #include <DHT.h>
 #include <DHT_U.h>
 #include <Wire.h>
 #include <BH1750.h>
+#include "menu.h"
+
+// configuring lcd display
+// const int rs = 2, e = 4, d4 = 8, d5 = 9, d6 = 10, d7 = 11;
+LiquidCrystal lcd(12, 11, 10, 9, 8, 7);
 
 // initialize BH1750 object
 BH1750 GY302;
@@ -43,6 +54,15 @@ void setup()
   pinMode(ledmatrix, OUTPUT);
   pinMode(waterpump, OUTPUT);
   pinMode(soilmoistureSensor, INPUT);
+
+  // menu setup
+  setupMenu(&lcd);
+
+  pinMode(navButton, INPUT);
+  pinMode(okButton, INPUT);
+
+  // debug
+  Serial.begin(9600);
 }
 
 void processTemperatureAndHumidity()
@@ -98,9 +118,23 @@ void processLightLevel()
   }
 }
 
+void readInput()
+{
+  navState = digitalRead(navButton);
+  okState = digitalRead(okButton);
+}
+
 void loop()
 {
   processTemperatureAndHumidity();
   processsoilMoisture();
   processLightLevel();
+
+    // menu
+  readInput();
+  navigateMenu();
+  processOutput(&lcd);
+
+  // prevents multiple reads of a button press
+  delay(150);
 }
