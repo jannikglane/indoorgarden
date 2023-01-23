@@ -94,6 +94,9 @@ void processsoilMoisture()
   if (soilmoisturepercent < minSoilMoisturepercent)
   {
     digitalWrite(waterpump, LOW);
+    Delay(5000);
+    digitalWrite(waterpump,HIGH);
+    Delay(5000);
   }
   else
   {
@@ -114,6 +117,7 @@ void processLightLevel()
   }
   else
   {
+    // stop LED Matrix
     digitalWrite(ledmatrix, LOW);
   }
 }
