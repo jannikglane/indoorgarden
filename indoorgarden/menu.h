@@ -1,80 +1,98 @@
 #ifndef MENU_H
 #define MENU_H
-//#include <String.h> 
-#include <WString.h>
-#include "settings.h"
 
-// enum MenuType {
-//     base = 0,
-//     lightControl = 1,
-//     waterControl = 2,
-//     tempControl = 3
-// };
+#include <LiquidCrystal.h>
+#include <math.h>
 
-// struct MenuItem
-// {
-//     String title;
-//     int *valueToChange;
-// };
+const int navButton = 6;
+const int okButton = 4;
 
-// struct SubMenu
-// {
-//     String title;
-//     MenuItem items[5];
-//     MenuType type;
-// };
+extern uint8_t navState;
+extern uint8_t okState;
+extern String currentSelection;
+extern String nextSelection;
+extern int changeDetector;
 
-// struct MenuBase
-// {
-//     int menuPos;
-//     MenuType currentMenu;
-//     SubMenu entries[3];
-//     LightSettings lightSettings;
-//     WaterSettings waterSettings;
-//     TempSettings tempSettings;
-// };
+const int totalNodes = 2;
+const int settingNodes = 4;
 
-// MenuBase initializeMenu();
-// SubMenu buildLightMenu(LightSettings *settings);
-// SubMenu buildWaterMenu(WaterSettings *settings);
-// SubMenu buildTempMenu(TempSettings *settings);
-// void navigateMenu(MenuBase *menu, int newPos);
-
-enum ActionType
+enum SettingType
 {
-    toggle = 1,
-    values = 2
+  threshold = 0,
+  toggle = 1,
+  startTime = 2,
+  endTime = 3,
+  fixedTime = 4,
 };
 
 enum NodeType
 {
-    node = 1,
-    action = 2
-};
-struct MenuAction
-{
-    ActionType type;
-    String name;
-    bool toogle;
-    int values[48];
+  node = 0,
+  setting = 1,
+  back = 2
 };
 
-struct MenuNode
+struct Setting
 {
-    NodeType type;
-    String name;
-    MenuNode *parentNode;
-    MenuNode *childNode;
-    MenuNode *siblingNode;
-    MenuAction action;
+  SettingType type;
+  bool onBackButton;
+  double threshold;
+  bool toggle;
+  double startTime;
+  double endTime;
+  double fixedTime;
 };
 
-MenuNode buildMenu();
-void navigateToNextSibling(MenuNode *node);
-void navigateToParent(MenuNode *node);
-void navigateToChild(MenuNode *node);
-void navigateToAction(MenuNode *node);
-void toggleAction(MenuAction *action);
-void navigateToValueSelection(MenuAction *action);
+struct SettingNode {
+  NodeType type;
+  String name;
+  Setting setting;
+};
+
+struct MenuNode {
+  NodeType type;
+  String name;
+  SettingNode settings[settingNodes];
+  bool inEditSetting;
+  bool inSettingsNode;
+  bool hasSetting;
+  int settingsPos;
+  bool onBackButton;
+};
+
+struct Menu {
+  int nodePos;
+  MenuNode nodes[totalNodes];
+};
+
+extern Menu menu;
+
+void setupMenu(LiquidCrystal *lcd);
+
+int determineNextPos(int currentPos, int maxPos);
+
+String determineNextNodeSelection(int currentPos, int maxPos);
+
+String determineNextSettingSelection(int currentPos, int maxPos);
+
+void printMenu(LiquidCrystal *lcd);
+
+void changeSelection();
+
+void enterSettingsNodes(MenuNode *node);
+
+String convertToTime(double time);
+
+String getSettingValueAsString(Setting *setting);
+
+void enterSettingEditMode(MenuNode *node);
+
+void alterSettingValue(double *value, double max);
+
+void alterValue(Setting *setting);
+
+void navigateMenu();
+
+void processOutput(LiquidCrystal *lcd);
 
 #endif
