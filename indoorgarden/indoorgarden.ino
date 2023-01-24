@@ -16,10 +16,10 @@ Date: 25.01.2023
 LiquidCrystal lcd(12, 11, 10, 9, 8, 7);
 
 // initialize BH1750 object
-BH1750 GY302;
+BH1750 lightMeter;
 
 //initialize DHT object
-#define PIN 2
+#define PIN 4
 #define TYPE DHT11
 DHT dht(PIN, TYPE);
 
@@ -30,9 +30,9 @@ float minSoilMoisturepercent = 40;
 float minLightLevel = 40;
 
 // define pins
+const int waterpump = 2;
 const int ventilator = 3;
-const int ledmatrix = 4;
-const int waterpump = 6;
+const int ledmatrix = 6;
 const int soilmoistureSensor = A0;
 
 // define values for soil moisture
@@ -46,8 +46,9 @@ void setup()
   // start dht library for temperature sensor
   dht.begin();
 
-  // start gy302 library for light sensor
-  GY302.begin();
+  // start libraries for light sensor
+  Wire.begin();
+  lightMeter.begin();
 
   // set pin mode
   pinMode(ventilator, OUTPUT);
@@ -108,7 +109,7 @@ void processsoilMoisture()
 void processLightLevel()
 {
   // get reading from gy302 light sensor
-  uint16_t lux = GY302.readLightLevel();
+  float lux = lightMeter.readLightLevel();
   
   //start ledmatrix if lightlevel is higher than minLightLevel
   if (lux < minLightLevel)
