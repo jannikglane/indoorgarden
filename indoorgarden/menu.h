@@ -4,8 +4,8 @@
 #include <LiquidCrystal.h>
 #include <math.h>
 
-const int navButton = 6;
-const int okButton = 4;
+const int navButton = 7;
+const int okButton = 5;
 
 extern uint8_t navState;
 extern uint8_t okState;
