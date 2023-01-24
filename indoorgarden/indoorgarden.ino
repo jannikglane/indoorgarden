@@ -95,6 +95,7 @@ void processsoilMoisture()
   if (soilmoisturepercent < minSoilMoisturepercent)
   {
     digitalWrite(waterpump, LOW);
+    // delays to protect the plant for too much water
     delay(5000);
     digitalWrite(waterpump,HIGH);
     delay(5000);
