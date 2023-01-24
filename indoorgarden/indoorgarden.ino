@@ -12,8 +12,8 @@ Date: 25.01.2023
 #include "menu.h"
 
 // configuring lcd display
-// const int rs = 2, e = 4, d4 = 8, d5 = 9, d6 = 10, d7 = 11;
-LiquidCrystal lcd(12, 11, 10, 9, 8, 7);
+// const int rs = 13, e = 12, d4 = 11, d5 = 10, d6 = 9, d7 = 8;
+LiquidCrystal lcd(13, 12, 11, 10, 9, 8);
 
 // initialize BH1750 object
 BH1750 lightMeter;
@@ -95,9 +95,9 @@ void processsoilMoisture()
   if (soilmoisturepercent < minSoilMoisturepercent)
   {
     digitalWrite(waterpump, LOW);
-    Delay(5000);
+    delay(5000);
     digitalWrite(waterpump,HIGH);
-    Delay(5000);
+    delay(5000);
   }
   else
   {
