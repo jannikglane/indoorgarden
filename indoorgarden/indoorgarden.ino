@@ -94,9 +94,9 @@ void processsoilMoisture()
   if (soilmoisturepercent < minSoilMoisturepercent)
   {
     digitalWrite(waterpump, LOW);
-    Delay(5000);
+    delay(5000);
     digitalWrite(waterpump,HIGH);
-    Delay(5000);
+    delay(5000);
   }
   else
   {
