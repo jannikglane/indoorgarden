@@ -23,6 +23,12 @@ BH1750 lightMeter;
 #define TYPE DHT11
 DHT dht(PIN, TYPE);
 
+// reference default values
+const float maxTemperatureDefault = 18;
+const float maxHumidityDefault = 50;
+const float minSoilMoisturepercentDefault = 40;
+const float minLightLevelDefault = 40;
+
 // define min and max values
 float maxTemperature = 18;
 float maxHumidity = 50;
@@ -130,6 +136,14 @@ void readInput()
   okState = digitalRead(okButton);
 }
 
+// update max values for the sensors 
+void updateSensorValues()
+{
+  minLightLevel = (minLightLevel / 100) * (menu.nodes[0].settings[0].setting.threshold * 100);
+  minSoilMoisturepercent = (minSoilMoisturepercentDefault / 100) * (menu.nodes[1].settings[0].setting.threshold * 100);
+  maxTemperature = (maxTemperatureDefault / 100) * (menu.nodes[2].settings[0].setting.threshold * 100);
+}
+
 void loop()
 {
   processTemperatureAndHumidity();
@@ -140,6 +154,7 @@ void loop()
   readInput();
   navigateMenu();
   processOutput(&lcd);
+  updateSensorValues();
 
   // prevents multiple reads of a button press
   delay(150);

@@ -13,7 +13,7 @@ extern String currentSelection;
 extern String nextSelection;
 extern int changeDetector;
 
-const int totalNodes = 2;
+const int totalNodes = 3;
 const int settingNodes = 4;
 
 enum SettingType
@@ -36,11 +36,11 @@ struct Setting
 {
   SettingType type;
   bool onBackButton;
-  double threshold;
+  float threshold;
   bool toggle;
-  double startTime;
-  double endTime;
-  double fixedTime;
+  float startTime;
+  float endTime;
+  float fixedTime;
 };
 
 struct SettingNode {
@@ -81,13 +81,13 @@ void changeSelection();
 
 void enterSettingsNodes(MenuNode *node);
 
-String convertToTime(double time);
+String convertToTime(float time);
 
 String getSettingValueAsString(Setting *setting);
 
 void enterSettingEditMode(MenuNode *node);
 
-void alterSettingValue(double *value, double max);
+void alterSettingValue(float *value, float max);
 
 void alterValue(Setting *setting);
 

@@ -11,8 +11,6 @@ void setupMenu(LiquidCrystal *lcd) {
 
   lcd->begin(16, 2);
 
-  // Serial.begin(9600); 
-
   Setting lightThreshold = {threshold, false, 0.5, false, 0, 0, 0};
   Setting lightUseTime = {toggle, false, 0.5, false, 0, 0, 0};
   Setting lightStartTime = {startTime, false, 0.5, false, 8.0, 0, 0};
@@ -39,9 +37,13 @@ void setupMenu(LiquidCrystal *lcd) {
   MenuNode waterNode = lightNode;
   waterNode.name = "Wassermenue";
 
+  MenuNode temperatureNode = lightNode;
+  temperatureNode.name = "Temepatureinst.";
+
   menu.nodePos = 0;
   menu.nodes[0] = lightNode;
   menu.nodes[1] = waterNode;
+  menu.nodes[2] = temperatureNode;
 
   changeSelection();
 }
@@ -83,21 +85,6 @@ void printMenu(LiquidCrystal *lcd)
   lcd->print(currentSelection);
   lcd->setCursor(0,1);
   lcd->print(nextSelection);
-
-  // Serial.print("menu.pos ");
-  // Serial.println(menu.nodePos);
-
-  // Serial.print("settingPos ");
-  // Serial.println(menu.nodes[menu.nodePos].settingsPos);
-  
-  // Serial.print("inSettingsNode ");
-  // Serial.println(menu.nodes[menu.nodePos].inSettingsNode);
-
-  // Serial.print("editSetting");
-  // Serial.println(menu.nodes[menu.nodePos].inEditSetting);
-
-  // Serial.print("onBackButton ");
-  // Serial.println(menu.nodes[menu.nodePos].settings[0].setting.onBackButton);
 }
 
 void changeSelection()
