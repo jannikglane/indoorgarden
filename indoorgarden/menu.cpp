@@ -137,7 +137,7 @@ void enterSettingsNodes(MenuNode *node)
   changeSelection();
 }
 
-String convertToTime(double time)
+String convertToTime(float time)
 {
   int hour = floor(time);
   int minutes = floor(((time - hour) * 60));
@@ -186,7 +186,7 @@ void enterSettingEditMode(MenuNode *node)
   node->inEditSetting = true;
 }
 
-void alterSettingValue(double *value, double max)
+void alterSettingValue(float *value, float max)
 {
   if (*value >= max)
   {
