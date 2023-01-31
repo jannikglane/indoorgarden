@@ -137,8 +137,6 @@ void readInput()
 {
   navState = digitalRead(navButton);
   okState = digitalRead(okButton);
-
-  Serial.print(navState);
 }
 
 // update max values for the sensors 
