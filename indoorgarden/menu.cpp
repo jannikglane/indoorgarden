@@ -1,4 +1,5 @@
 #include "menu.h"
+#include <Arduino.h>
 
 extern uint8_t navState = 0x0;
 extern uint8_t okState = 0x0;
@@ -11,10 +12,10 @@ void setupMenu(LiquidCrystal *lcd) {
 
   lcd->begin(16, 2);
 
-  Setting lightThreshold = {threshold, false, 0.5, false, 0, 0, 0};
-  Setting lightUseTime = {toggle, false, 0.5, false, 0, 0, 0};
-  Setting lightStartTime = {startTime, false, 0.5, false, 8.0, 0, 0};
-  Setting lightEndTime = {endTime, 0.5, false, false, 0, 8.0, 0};
+  Setting lightThreshold = {threshold, false, 1.0, false, 0, 0, 0};
+  Setting lightUseTime = {toggle, false, 1.0, false, 0, 0, 0};
+  Setting lightStartTime = {startTime, false, 1.0, false, 8.0, 0, 0};
+  Setting lightEndTime = {endTime, 1.0, false, false, 0, 8.0, 0};
 
   SettingNode lTS = {setting, "Schwellwert", lightThreshold};
   SettingNode lUT = {setting, "Zeit verwenden", lightUseTime};

@@ -24,20 +24,20 @@ BH1750 lightMeter;
 DHT dht(PIN, TYPE);
 
 // reference default values
-const float maxTemperatureDefault = 18;
-const float maxHumidityDefault = 50;
-const float minSoilMoisturepercentDefault = 40;
+const float maxTemperatureDefault = 24;
+const float maxHumidityDefault = 70;
+const float minSoilMoisturepercentDefault = 30;
 const float minLightLevelDefault = 40;
 
 // define min and max values
-float maxTemperature = 18;
-float maxHumidity = 50;
-float minSoilMoisturepercent = 40;
+float maxTemperature = 24;
+float maxHumidity = 70;
+float minSoilMoisturepercent = 30;
 float minLightLevel = 40;
 
 // define pins
-const int waterpump = 2;
-const int ventilator = 3;
+const int waterpump = 3;
+const int ventilator = 2;
 const int ledmatrix = 6;
 const int soilmoistureSensor = A0;
 
@@ -62,14 +62,21 @@ void setup()
   pinMode(waterpump, OUTPUT);
   pinMode(soilmoistureSensor, INPUT);
 
-  // menu setup
-  setupMenu(&lcd);
-
   pinMode(navButton, INPUT);
   pinMode(okButton, INPUT);
 
+  // thresholds
+  maxTemperature = maxTemperatureDefault;
+  maxHumidity = maxHumidityDefault;
+  minSoilMoisturepercent =minSoilMoisturepercentDefault;
+  minLightLevel = minLightLevelDefault;
+
+  // menu setup
+  setupMenu(&lcd);
+
   // debug
   Serial.begin(9600);
+  Serial.println("Initialized");
 }
 
 void processTemperatureAndHumidity()
@@ -81,12 +88,12 @@ void processTemperatureAndHumidity()
   // start ventilator if temperature or humidity is higher than max values
   if ((temperature > maxTemperature) || (humidity > maxHumidity))
   {
-    digitalWrite(ventilator, LOW);
+    digitalWrite(ventilator, HIGH);
   }
   else
   {
     //stop ventilator
-    digitalWrite(ventilator, HIGH);
+    digitalWrite(ventilator, LOW);
   }
 }
 
@@ -101,10 +108,6 @@ void processsoilMoisture()
   if (soilmoisturepercent < minSoilMoisturepercent)
   {
     digitalWrite(waterpump, LOW);
-    // delays to protect the plant for too much water
-    delay(5000);
-    digitalWrite(waterpump,HIGH);
-    delay(5000);
   }
   else
   {
@@ -134,6 +137,8 @@ void readInput()
 {
   navState = digitalRead(navButton);
   okState = digitalRead(okButton);
+
+  Serial.print(navState);
 }
 
 // update max values for the sensors 
@@ -150,7 +155,7 @@ void loop()
   processsoilMoisture();
   processLightLevel();
 
-    // menu
+  // menu
   readInput();
   navigateMenu();
   processOutput(&lcd);
