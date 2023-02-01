@@ -27,13 +27,13 @@ DHT dht(PIN, TYPE);
 const float maxTemperatureDefault = 24;
 const float maxHumidityDefault = 70;
 const float minSoilMoisturepercentDefault = 30;
-const float minLightLevelDefault = 40;
+const float minLightLevelDefault = 500;
 
 // define min and max values
-float maxTemperature = 24;
-float maxHumidity = 70;
-float minSoilMoisturepercent = 30;
-float minLightLevel = 40;
+float maxTemperature;
+float maxHumidity;
+float minSoilMoisturepercent;
+float minLightLevel;
 
 // define pins
 const int waterpump = 3;
@@ -49,6 +49,9 @@ float soilmoisturepercent = 0;
 
 void setup()
 {
+    // debug
+  Serial.begin(9600);
+  
   // start dht library for temperature sensor
   dht.begin();
 
@@ -73,10 +76,6 @@ void setup()
 
   // menu setup
   setupMenu(&lcd);
-
-  // debug
-  Serial.begin(9600);
-  Serial.println("Initialized");
 }
 
 void processTemperatureAndHumidity()
@@ -120,6 +119,14 @@ void processLightLevel()
 {
   // get reading from gy302 light sensor
   float lux = lightMeter.readLightLevel();
+
+  Serial.print("MinLightLevel: ");
+  Serial.print(minLightLevel);
+  Serial.print(" MinLightLevelDefault: ");
+  Serial.print(minLightLevelDefault);
+  Serial.print(" Lux: ");
+  Serial.print(lux);
+  Serial.println();
   
   //start ledmatrix if lightlevel is higher than minLightLevel
   if (lux < minLightLevel)
@@ -142,7 +149,7 @@ void readInput()
 // update max values for the sensors 
 void updateSensorValues()
 {
-  minLightLevel = (minLightLevel / 100) * (menu.nodes[0].settings[0].setting.threshold * 100);
+  minLightLevel = (minLightLevelDefault / 100) * (menu.nodes[0].settings[0].setting.threshold * 100);
   minSoilMoisturepercent = (minSoilMoisturepercentDefault / 100) * (menu.nodes[1].settings[0].setting.threshold * 100);
   maxTemperature = (maxTemperatureDefault / 100) * (menu.nodes[2].settings[0].setting.threshold * 100);
 }

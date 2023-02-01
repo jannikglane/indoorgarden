@@ -6,45 +6,49 @@ extern uint8_t okState = 0x0;
 extern String currentSelection = "";
 extern String nextSelection = "";
 extern int changeDetector = 1;
-extern Menu menu = {};
+extern Menu menu = {0,
+  {
+    {"Lichtmenue",
+    {
+      {"Schwellwert", {threshold, false, 1.0, false, 0, 0, 0}},
+      {"Zeit verwenden", {toggle, false, 1.0, false, 0, 0, 0}},
+      {"Start-Zeit", {startTime, false, 1.0, false, 0, 0, 0}},
+      {"End-Zeit", {endTime, false, 1.0, false, 0, 0, 0}}
+    },
+    false,
+    false,
+    false,
+    0,
+    false},
+    {"Wassermenue",
+    {
+      {"Schwellwert", {threshold, false, 1.0, false, 0, 0, 0}},
+      {"Zeit verwenden", {toggle, false, 1.0, false, 0, 0, 0}},
+      {"Start-Zeit", {startTime, false, 1.0, false, 0, 0, 0}},
+      {"End-Zeit", {endTime, false, 1.0, false, 0, 0, 0}}
+    },
+    false,
+    false,
+    false,
+    0,
+    false},
+    {"Temp.menue",
+    {
+      {"Schwellwert", {threshold, false, 1.0, false, 0, 0, 0}},
+      {"Zeit verwenden", {toggle, false, 1.0, false, 0, 0, 0}},
+      {"Start-Zeit", {startTime, false, 1.0, false, 0, 0, 0}},
+      {"End-Zeit", {endTime, false, 1.0, false, 0, 0, 0}}
+    },
+    false,
+    false,
+    false,
+    0,
+    false}
+  }
+};
 
 void setupMenu(LiquidCrystal *lcd) {
-
   lcd->begin(16, 2);
-
-  Setting lightThreshold = {threshold, false, 1.0, false, 0, 0, 0};
-  Setting lightUseTime = {toggle, false, 1.0, false, 0, 0, 0};
-  Setting lightStartTime = {startTime, false, 1.0, false, 8.0, 0, 0};
-  Setting lightEndTime = {endTime, 1.0, false, false, 0, 8.0, 0};
-
-  SettingNode lTS = {setting, "Schwellwert", lightThreshold};
-  SettingNode lUT = {setting, "Zeit verwenden", lightUseTime};
-  SettingNode lST = {setting, "Start-Zeit", lightStartTime};
-  SettingNode lET = {setting, "End-Zeit", lightEndTime};
-
-  MenuNode lightNode;
-  lightNode.name = "Lichtmenue";
-  lightNode.settings[0] = lTS;
-  lightNode.settings[1] = lUT;
-  lightNode.settings[2] = lST;
-  lightNode.settings[3] = lET;
-  lightNode.type = node;
-  lightNode.inEditSetting = false;
-  lightNode.inSettingsNode = false;
-  lightNode.hasSetting = false;
-  lightNode.settingsPos = 0;
-  lightNode.onBackButton = false;
-
-  MenuNode waterNode = lightNode;
-  waterNode.name = "Wassermenue";
-
-  MenuNode temperatureNode = lightNode;
-  temperatureNode.name = "Temepatureinst.";
-
-  menu.nodePos = 0;
-  menu.nodes[0] = lightNode;
-  menu.nodes[1] = waterNode;
-  menu.nodes[2] = temperatureNode;
 
   changeSelection();
 }

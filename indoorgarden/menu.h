@@ -25,13 +25,6 @@ enum SettingType
   fixedTime = 4,
 };
 
-enum NodeType
-{
-  node = 0,
-  setting = 1,
-  back = 2
-};
-
 struct Setting
 {
   SettingType type;
@@ -44,13 +37,11 @@ struct Setting
 };
 
 struct SettingNode {
-  NodeType type;
   String name;
   Setting setting;
 };
 
 struct MenuNode {
-  NodeType type;
   String name;
   SettingNode settings[settingNodes];
   bool inEditSetting;
