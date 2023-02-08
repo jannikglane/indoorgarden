@@ -24,7 +24,7 @@ BH1750 lightMeter;
 DHT dht(PIN, TYPE);
 
 // reference default values
-const float maxTemperatureDefault = 24;
+const float maxTemperatureDefault = 28;
 const float maxHumidityDefault = 70;
 const float minSoilMoisturepercentDefault = 30;
 const float minLightLevelDefault = 500;
@@ -94,6 +94,12 @@ void processTemperatureAndHumidity()
     //stop ventilator
     digitalWrite(ventilator, LOW);
   }
+
+  Serial.print("maxTemp: ");
+  Serial.print(maxTemperature);
+  Serial.print(" Temp: ");
+  Serial.print(temperature);
+  Serial.println();
 }
 
 void processsoilMoisture()
@@ -113,6 +119,12 @@ void processsoilMoisture()
     //stop water pump
     digitalWrite(waterpump, HIGH);
   }
+
+  Serial.print("MinSoilMoisture: ");
+  Serial.print(minSoilMoisturepercent);
+  Serial.print(" Moisture: ");
+  Serial.print(soilmoisturepercent);
+  Serial.println();
 }
 
 void processLightLevel()
@@ -122,8 +134,6 @@ void processLightLevel()
 
   Serial.print("MinLightLevel: ");
   Serial.print(minLightLevel);
-  Serial.print(" MinLightLevelDefault: ");
-  Serial.print(minLightLevelDefault);
   Serial.print(" Lux: ");
   Serial.print(lux);
   Serial.println();
